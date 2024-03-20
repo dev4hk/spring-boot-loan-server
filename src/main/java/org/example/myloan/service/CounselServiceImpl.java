@@ -4,11 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.example.myloan.domain.Counsel;
 import org.example.myloan.dto.CounselDto.Request;
 import org.example.myloan.dto.CounselDto.Response;
+import org.example.myloan.exception.BaseException;
+import org.example.myloan.exception.ResultType;
 import org.example.myloan.repository.CounselRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +30,8 @@ public class CounselServiceImpl implements CounselService{
 
     @Override
     public Response get(Long counselId) {
-        return null;
+        Counsel counsel = counselRepository.findById(counselId)
+                .orElseThrow(() -> new BaseException(ResultType.SYSTEM_ERROR));
+        return modelMapper.map(counsel, Response.class);
     }
 }
