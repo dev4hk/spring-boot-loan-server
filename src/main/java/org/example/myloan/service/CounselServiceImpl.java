@@ -50,4 +50,9 @@ public class CounselServiceImpl implements CounselService{
         counsel.setZipCode(request.getZipCode());
         return modelMapper.map(counsel, Response.class);
     }
+
+    @Override
+    public void delete(Long counselId) {
+
+    }
 }
