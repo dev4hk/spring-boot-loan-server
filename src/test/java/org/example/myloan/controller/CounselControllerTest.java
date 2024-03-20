@@ -56,6 +56,20 @@ class CounselControllerTest {
         )
                 .andExpect(status().isOk());
         then(counselService).should().create(any(Request.class));
+    }
 
+    @DisplayName("[API][GET] Get a Counsel by counselId")
+    @Test
+    public void getCounselById() throws Exception {
+        Long counselId = 1L;
+        Response counselResponseDto = Response.builder().build();
+        given(counselService.create(any(Request.class)))
+                .willReturn(counselResponseDto);
+        mvc.perform(get("/counsels")
+                        .param("counselId", counselId.toString())
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk());
+        then(counselService).should().get(counselId);
     }
 }
