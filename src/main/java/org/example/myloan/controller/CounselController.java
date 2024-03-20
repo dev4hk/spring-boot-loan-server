@@ -24,6 +24,11 @@ public class CounselController {
 
     @GetMapping("/{counselId}")
     public ResponseDTO<Response> get(@PathVariable Long counselId) {
+        return ok(counselService.get(counselId));
+    }
+
+    @PutMapping("/{counselId}")
+    public ResponseDTO<Response> update(@PathVariable Long counselId, @RequestBody Request request) {
         return null;
     }
 }

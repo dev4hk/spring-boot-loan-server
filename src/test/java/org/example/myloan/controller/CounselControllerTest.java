@@ -23,8 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Test - Counsel Controller")
@@ -65,11 +64,26 @@ class CounselControllerTest {
         Response counselResponseDto = Response.builder().build();
         given(counselService.create(any(Request.class)))
                 .willReturn(counselResponseDto);
-        mvc.perform(get("/counsels")
-                        .param("counselId", counselId.toString())
+        mvc.perform(get("/counsels/{counselId}", counselId)
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk());
         then(counselService).should().get(counselId);
+    }
+
+    @DisplayName("[API][PUT] Update a Counsel")
+    @Test
+    public void updateCounsel() throws Exception {
+        Long counselId = 1L;
+        Request counselRequestDto = Request.builder().build();
+        Response counselResponseDto = Response.builder().build();
+        given(counselService.update(counselId, counselRequestDto))
+                .willReturn(counselResponseDto);
+        mvc.perform(put("/counsels/{counselId}", counselId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(counselRequestDto))
+                )
+                .andExpect(status().isOk());
+        then(counselService).should().update(counselId, counselRequestDto);
     }
 }
