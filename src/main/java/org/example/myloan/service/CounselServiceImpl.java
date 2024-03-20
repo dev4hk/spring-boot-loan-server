@@ -53,6 +53,8 @@ public class CounselServiceImpl implements CounselService{
 
     @Override
     public void delete(Long counselId) {
-
+        Counsel counsel = counselRepository.findById(counselId)
+                .orElseThrow(() -> new BaseException(ResultType.SYSTEM_ERROR));
+        counsel.setIsDeleted(true);
     }
 }
