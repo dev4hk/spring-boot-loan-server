@@ -2,6 +2,8 @@ package org.example.myloan.service;
 
 import org.example.myloan.domain.Counsel;
 import org.example.myloan.dto.CounselDto;
+import org.example.myloan.exception.BaseException;
+import org.example.myloan.exception.ResultType;
 import org.example.myloan.repository.CounselRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,7 @@ import org.modelmapper.ModelMapper;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -70,5 +73,12 @@ class CounselServiceTest {
         when(counselRepository.findById(counselId)).thenReturn(Optional.ofNullable(entity));
         CounselDto.Response actual = counselService.get(counselId);
         assertThat(actual.getCounselId()).isSameAs(counselId);
+    }
+
+    @Test
+    void Should_ThrowException_When_RequestNotExistCounselId() {
+        Long findId = 2L;
+        when(counselRepository.findById(findId)).thenThrow(new BaseException(ResultType.SYSTEM_ERROR));
+        assertThrows(BaseException.class, () -> counselService.get(findId));
     }
 }
