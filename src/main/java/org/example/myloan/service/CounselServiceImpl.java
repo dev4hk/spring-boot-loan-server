@@ -9,11 +9,12 @@ import org.example.myloan.exception.ResultType;
 import org.example.myloan.repository.CounselRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CounselServiceImpl implements CounselService{
 
@@ -28,6 +29,7 @@ public class CounselServiceImpl implements CounselService{
         return modelMapper.map(created, Response.class);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Response get(Long counselId) {
         Counsel counsel = counselRepository.findById(counselId)
@@ -37,6 +39,15 @@ public class CounselServiceImpl implements CounselService{
 
     @Override
     public Response update(Long counselId, Request request) {
-        return null;
+        Counsel counsel = counselRepository.findById(counselId).orElseThrow(() ->
+                new BaseException(ResultType.SYSTEM_ERROR));
+        counsel.setName(request.getName());
+        counsel.setCellPhone(request.getCellPhone());
+        counsel.setEmail(request.getEmail());
+        counsel.setMemo(request.getMemo());
+        counsel.setAddress(request.getAddress());
+        counsel.setAddressDetail(request.getAddressDetail());
+        counsel.setZipCode(request.getZipCode());
+        return modelMapper.map(counsel, Response.class);
     }
 }

@@ -98,7 +98,6 @@ class CounselServiceTest {
                 .build();
 
         when(counselRepository.findById(counselId)).thenReturn(Optional.of(entity));
-        when(counselRepository.save(any(Counsel.class))).thenReturn(entity);
 
         CounselDto.Response actual = counselService.update(counselId, request);
 
