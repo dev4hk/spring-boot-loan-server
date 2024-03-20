@@ -93,7 +93,7 @@ class CounselControllerTest {
     public void deleteCounsel() throws Exception {
         Long counselId = 1L;
         willDoNothing().given(counselService).delete(counselId);
-        mvc.perform(put("/counsels/{counselId}", counselId)
+        mvc.perform(delete("/counsels/{counselId}", counselId)
                         .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk());
