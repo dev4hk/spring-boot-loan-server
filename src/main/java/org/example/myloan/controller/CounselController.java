@@ -20,6 +20,6 @@ public class CounselController {
 
     @PostMapping
     public ResponseDTO<Response> create(@RequestBody Request request) {
-        return null;
+        return ResponseDTO.ok(counselService.create(request));
     }
 }
