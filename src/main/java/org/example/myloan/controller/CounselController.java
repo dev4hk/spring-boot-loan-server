@@ -34,6 +34,7 @@ public class CounselController {
 
     @DeleteMapping("/{counselId}")
     public ResponseDTO<Response> delete(@PathVariable Long counselId) {
-        return null;
+        counselService.delete(counselId);
+        return ok();
     }
 }
