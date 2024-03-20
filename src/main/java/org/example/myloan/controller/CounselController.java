@@ -29,6 +29,6 @@ public class CounselController {
 
     @PutMapping("/{counselId}")
     public ResponseDTO<Response> update(@PathVariable Long counselId, @RequestBody Request request) {
-        return null;
+        return ok(counselService.update(counselId, request));
     }
 }
