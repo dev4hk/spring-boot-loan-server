@@ -9,6 +9,7 @@ import org.example.myloan.service.CounselService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
+import org.mockito.BDDMockito;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -22,8 +23,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -86,5 +86,17 @@ class CounselControllerTest {
                 )
                 .andExpect(status().isOk());
         then(counselService).should().update(eq(counselId), any(Request.class));
+    }
+
+    @DisplayName("[API][DELETE] Delete a Counsel")
+    @Test
+    public void deleteCounsel() throws Exception {
+        Long counselId = 1L;
+        willDoNothing().given(counselService).delete(counselId);
+        mvc.perform(put("/counsels/{counselId}", counselId)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk());
+        then(counselService).should().delete(counselId);
     }
 }
