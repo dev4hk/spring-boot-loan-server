@@ -19,6 +19,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -81,5 +82,28 @@ class CounselServiceTest {
         Long findId = 2L;
         when(counselRepository.findById(findId)).thenThrow(new BaseException(ResultType.SYSTEM_ERROR));
         assertThrows(BaseException.class, () -> counselService.get(findId));
+    }
+
+    @DisplayName("Update a counsel")
+    @Test
+    void Should_ReturnUpdatedResponseOfExistCounselEntity_When_RequestUpdateExistCounselInfo() {
+        Long findId = 1L;
+        Counsel entity = Counsel.builder()
+                .counselId(1L)
+                .name("Member Kim")
+                .build();
+
+        CounselDto.Request request = CounselDto.Request.builder()
+                .name("Member Lee")
+                .build();
+
+        when(counselRepository.findById(findId)).thenReturn(Optional.of(entity));
+        when(counselRepository.save(any(Counsel.class))).thenReturn(entity);
+
+        CounselDto.Response actual = counselService.update(findId, request);
+
+        assertThat(actual.getCounselId()).isSameAs(findId);
+        assertThat(actual.getName()).isSameAs(request.getName());
+
     }
 }

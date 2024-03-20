@@ -34,4 +34,9 @@ public class CounselServiceImpl implements CounselService{
                 .orElseThrow(() -> new BaseException(ResultType.SYSTEM_ERROR));
         return modelMapper.map(counsel, Response.class);
     }
+
+    @Override
+    public Response update(Long counselId, Request request) {
+        return null;
+    }
 }
