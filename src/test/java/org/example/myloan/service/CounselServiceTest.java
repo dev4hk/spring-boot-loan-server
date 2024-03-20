@@ -13,6 +13,8 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -56,5 +58,17 @@ class CounselServiceTest {
         CounselDto.Response actual = counselService.create(request);
 
         assertThat(actual.getName()).isSameAs(entity.getName());
+    }
+
+    @DisplayName("Get a counsel by id")
+    @Test
+    void Should_ReturnResponseOfExistCounselEntity_When_RequestExistCounselId() {
+        Long counselId = 1L;
+        Counsel entity = Counsel.builder()
+                .counselId(1L)
+                .build();
+        when(counselRepository.findById(counselId)).thenReturn(Optional.ofNullable(entity));
+        CounselDto.Response actual = counselService.get(counselId);
+        assertThat(actual.getCounselId()).isSameAs(counselId);
     }
 }

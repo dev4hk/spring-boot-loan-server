@@ -24,4 +24,9 @@ public class CounselServiceImpl implements CounselService{
         Counsel created = counselRepository.save(counsel);
         return modelMapper.map(created, Response.class);
     }
+
+    @Override
+    public Response get(Long counselId) {
+        return null;
+    }
 }
