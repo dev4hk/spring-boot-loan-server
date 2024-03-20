@@ -19,7 +19,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -138,7 +137,7 @@ class CounselServiceTest {
 
     @DisplayName("Delete a counsel")
     @Test
-    void Should_DeleteCounselEntity_When_RequestDeleteExistCounsel() {
+    void Should_DeleteCounselEntity_When_RequestDeleteNonExistCounsel() {
         Long counselId = 1L;
 
         when(counselRepository.findById(counselId)).thenThrow(new BaseException(ResultType.SYSTEM_ERROR));
