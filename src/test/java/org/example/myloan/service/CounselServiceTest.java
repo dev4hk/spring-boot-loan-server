@@ -79,7 +79,7 @@ class CounselServiceTest {
     @DisplayName("Get non-existing counsel by id")
     @Test
     void Should_ThrowException_When_RequestNotExistCounselId() {
-        Long findId = 2L;
+        Long counselId = 2L;
         when(counselRepository.findById(findId)).thenThrow(new BaseException(ResultType.SYSTEM_ERROR));
         assertThrows(BaseException.class, () -> counselService.get(findId));
     }
@@ -87,7 +87,7 @@ class CounselServiceTest {
     @DisplayName("Update a counsel")
     @Test
     void Should_ReturnUpdatedResponseOfExistCounselEntity_When_RequestUpdateExistCounselInfo() {
-        Long findId = 1L;
+        Long counselId = 1L;
         Counsel entity = Counsel.builder()
                 .counselId(1L)
                 .name("Member Kim")
@@ -104,6 +104,20 @@ class CounselServiceTest {
 
         assertThat(actual.getCounselId()).isSameAs(findId);
         assertThat(actual.getName()).isSameAs(request.getName());
+
+    }
+
+    @DisplayName("Update non-existing counsel")
+    @Test
+    void Should_ReturnUpdatedResponseOfExistCounselEntity_When_RequestUpdateExistCounselInfo() {
+        Long counselId = 1L;
+
+        CounselDto.Request request = CounselDto.Request.builder()
+                .name("Member Lee")
+                .build();
+
+        when(counselRepository.findById(findId)).thenThrow(new BaseException(ResultType.SYSTEM_ERROR));
+        assertThrows(BaseException.class, () -> counselService.update(counselId, request));
 
     }
 }
