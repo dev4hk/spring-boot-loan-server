@@ -78,10 +78,10 @@ class CounselServiceTest {
 
     @DisplayName("Get non-existing counsel by id")
     @Test
-    void Should_ThrowException_When_RequestNotExistCounselId() {
+    void Should_ThrowException_When_RequestNonExistCounselId() {
         Long counselId = 2L;
-        when(counselRepository.findById(findId)).thenThrow(new BaseException(ResultType.SYSTEM_ERROR));
-        assertThrows(BaseException.class, () -> counselService.get(findId));
+        when(counselRepository.findById(counselId)).thenThrow(new BaseException(ResultType.SYSTEM_ERROR));
+        assertThrows(BaseException.class, () -> counselService.get(counselId));
     }
 
     @DisplayName("Update a counsel")
@@ -97,26 +97,26 @@ class CounselServiceTest {
                 .name("Member Lee")
                 .build();
 
-        when(counselRepository.findById(findId)).thenReturn(Optional.of(entity));
+        when(counselRepository.findById(counselId)).thenReturn(Optional.of(entity));
         when(counselRepository.save(any(Counsel.class))).thenReturn(entity);
 
-        CounselDto.Response actual = counselService.update(findId, request);
+        CounselDto.Response actual = counselService.update(counselId, request);
 
-        assertThat(actual.getCounselId()).isSameAs(findId);
+        assertThat(actual.getCounselId()).isSameAs(counselId);
         assertThat(actual.getName()).isSameAs(request.getName());
 
     }
 
     @DisplayName("Update non-existing counsel")
     @Test
-    void Should_ReturnUpdatedResponseOfExistCounselEntity_When_RequestUpdateExistCounselInfo() {
+    void Should_ThrowException_When_RequestUpdateNonExistCounselInfo() {
         Long counselId = 1L;
 
         CounselDto.Request request = CounselDto.Request.builder()
                 .name("Member Lee")
                 .build();
 
-        when(counselRepository.findById(findId)).thenThrow(new BaseException(ResultType.SYSTEM_ERROR));
+        when(counselRepository.findById(counselId)).thenThrow(new BaseException(ResultType.SYSTEM_ERROR));
         assertThrows(BaseException.class, () -> counselService.update(counselId, request));
 
     }
