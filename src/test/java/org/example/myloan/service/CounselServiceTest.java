@@ -75,6 +75,7 @@ class CounselServiceTest {
         assertThat(actual.getCounselId()).isSameAs(counselId);
     }
 
+    @DisplayName("Get non-existing counsel by id")
     @Test
     void Should_ThrowException_When_RequestNotExistCounselId() {
         Long findId = 2L;
