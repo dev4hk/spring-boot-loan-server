@@ -21,6 +21,6 @@ public class TermsController {
 
     @PostMapping
     public ResponseDTO<Response> create(@RequestBody Request request) {
-        return null;
+        return ok(termsService.create(request));
     }
 }
