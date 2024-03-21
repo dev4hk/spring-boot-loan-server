@@ -13,6 +13,10 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -46,6 +50,24 @@ class TermsServiceTest {
         assertThat(actual).isNotNull();
         assertThat(actual.getName()).isSameAs(entity.getName());
         assertThat(actual.getTermsDetailUrl()).isSameAs(entity.getTermsDetailUrl());
+    }
+
+    @DisplayName("Get All Terms")
+    @Test
+    void Should_ReturnAllResponseOfExistTermsEntities_When_RequestTermsList() {
+        Terms terms1 = Terms.builder()
+                .name("Terms 1")
+                .termsDetailUrl("https://randomTermsPage/terms1")
+                .build();
+        Terms terms2 = Terms.builder()
+                .name("Terms 2")
+                .termsDetailUrl("https://randomTermsPage/terms2")
+                .build();
+        List<Terms> list = new ArrayList<>(Arrays.asList(terms1, terms2));
+        when(termsRepository.findAll()).thenReturn(list);
+        List<TermsDto.Response> actual = termsService.getAll();
+        assertThat(actual).isNotNull();
+        assertThat(actual.size()).isSameAs(list.size());
     }
 
 }
