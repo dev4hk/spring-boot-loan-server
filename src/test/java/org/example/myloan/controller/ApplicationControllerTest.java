@@ -20,8 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -84,5 +83,17 @@ class ApplicationControllerTest {
                 )
                 .andExpect(status().isOk());
         then(applicationService).should().update(eq(applicationId), any(Request.class));
+    }
+
+    @DisplayName("[API][DELETE] Delete an Application")
+    @Test
+    public void deleteApplication() throws Exception {
+        Long applicationId = 1L;
+        willDoNothing().given(applicationService).delete(applicationId);
+        mvc.perform(delete("/applications/{applicationId}", applicationId)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk());
+        then(applicationService).should().delete(applicationId);
     }
 }

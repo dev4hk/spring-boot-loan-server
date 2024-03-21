@@ -29,4 +29,9 @@ public class ApplicationController extends AbstractController{
     public ResponseDTO<Response> update(@PathVariable Long applicationId, @RequestBody Request request) {
         return ok(applicationService.update(applicationId, request));
     }
+
+    @DeleteMapping("/{applicationId}")
+    public ResponseDTO<Response> delete(@PathVariable Long applicationId) {
+        return null;
+    }
  }
