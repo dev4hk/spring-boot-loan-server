@@ -135,7 +135,7 @@ class CounselServiceTest {
         assertThat(entity.getIsDeleted()).isSameAs(true);
     }
 
-    @DisplayName("Delete a counsel")
+    @DisplayName("Delete non-existing counsel")
     @Test
     void Should_DeleteCounselEntity_When_RequestDeleteNonExistCounsel() {
         Long counselId = 1L;
