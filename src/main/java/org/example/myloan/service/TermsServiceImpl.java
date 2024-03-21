@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
@@ -29,6 +30,7 @@ public class TermsServiceImpl implements TermsService{
 
     @Override
     public List<Response> getAll() {
-        return null;
+        List<Terms> termsList = termsRepository.findAll();
+        return termsList.stream().map(terms -> modelMapper.map(terms, Response.class)).collect(Collectors.toList());
     }
 }
