@@ -5,6 +5,7 @@ import org.example.myloan.dto.ApplicationDto;
 import org.example.myloan.dto.ApplicationDto.AcceptTerms;
 import org.example.myloan.dto.ApplicationDto.Request;
 import org.example.myloan.dto.ApplicationDto.Response;
+import org.example.myloan.dto.FileDto;
 import org.example.myloan.dto.ResponseDTO;
 import org.example.myloan.service.ApplicationService;
 import org.example.myloan.service.FileStorageService;
@@ -13,6 +14,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+
+import java.util.List;
 
 
 @RequiredArgsConstructor
@@ -62,6 +66,18 @@ public class ApplicationController extends AbstractController{
                         HttpHeaders.CONTENT_DISPOSITION,
                         "attachment; filename=\"" + file.getFilename() + "\"")
                 .body(file);
+    }
+
+    @GetMapping("/{applicationId}/files/info")
+    public ResponseDTO<List<FileDto>> getFilesInfo(@PathVariable Long applicationId) {
+        List<FileDto> filesInfo = fileStorageService.loadAll(applicationId).map(path -> {
+            String fileName = path.getFileName().toString();
+            return FileDto.builder()
+                    .name(fileName)
+                    .url(MvcUriComponentsBuilder.fromMethodName(ApplicationController.class, "download", applicationId, fileName).build().toString())
+                    .build();
+        }).toList();
+        return ok(filesInfo);
     }
 
  }

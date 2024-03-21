@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -62,6 +63,19 @@ public class FileStorageServiceImpl implements FileStorageService {
                 throw new BaseException(ResultType.NOT_EXIST);
             }
 
+        } catch (Exception e) {
+            throw new BaseException(ResultType.SYSTEM_ERROR);
+        }
+    }
+
+    @Override
+    public Stream<Path> loadAll(Long applicationId) {
+        if (!isPresentApplication(applicationId)) {
+            throw new BaseException(ResultType.SYSTEM_ERROR);
+        }
+        try {
+            String applicationPath = uploadPath.concat("/" + applicationId);
+            return Files.walk(Paths.get(applicationPath), 1).filter(path -> !path.equals(Paths.get(applicationPath)));
         } catch (Exception e) {
             throw new BaseException(ResultType.SYSTEM_ERROR);
         }
