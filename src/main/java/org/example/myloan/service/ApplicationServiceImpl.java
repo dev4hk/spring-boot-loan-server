@@ -10,13 +10,14 @@ import org.example.myloan.exception.ResultType;
 import org.example.myloan.repository.ApplicationRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class ApplicationServiceImpl implements ApplicationService{
     private final ApplicationRepository applicationRepository;
     private final ModelMapper modelMapper;
-
 
     @Override
     public Response create(Request request) {
@@ -25,6 +26,7 @@ public class ApplicationServiceImpl implements ApplicationService{
         return modelMapper.map(created, Response.class);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Response get(Long applicationId) {
         Application application = applicationRepository.findById(applicationId)
@@ -34,7 +36,14 @@ public class ApplicationServiceImpl implements ApplicationService{
 
     @Override
     public Response update(Long applicationId, Request request) {
-        return null;
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new BaseException(ResultType.SYSTEM_ERROR));
+        application.setName(request.getName());
+        application.setCellPhone(request.getCellPhone());
+        application.setEmail(request.getEmail());
+        application.setHopeAmount(request.getHopeAmount());
+
+        return modelMapper.map(application, Response.class);
     }
 
     @Override

@@ -25,6 +25,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.when;
 
@@ -102,6 +103,15 @@ class ApplicationServiceTest {
         assertThat(actual.getApplicationId()).isSameAs(applicationId);
         assertThat(actual.getName()).isSameAs(request.getName());
 
+    }
+
+    @DisplayName("Update non-existing Application")
+    @Test
+    void Should_ReturnUpdatedResponseOfExistApplicationEntity_When_RequestUpdateNonExistApplicationInfo() {
+        Long applicationId = 1L;
+        Request request = Request.builder().build();
+        when(applicationRepository.findById(applicationId)).thenThrow(new BaseException(ResultType.SYSTEM_ERROR));
+        assertThrows(BaseException.class, () -> applicationService.update(applicationId, request));
     }
 
 
