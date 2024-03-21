@@ -12,6 +12,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @RequiredArgsConstructor
 @Transactional
 @Service
@@ -22,6 +24,7 @@ public class ApplicationServiceImpl implements ApplicationService{
     @Override
     public Response create(Request request) {
         Application application = modelMapper.map(request, Application.class);
+        application.setAppliedAt(LocalDateTime.now());
         Application created = applicationRepository.save(application);
         return modelMapper.map(created, Response.class);
     }
