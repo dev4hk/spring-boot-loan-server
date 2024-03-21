@@ -1,9 +1,11 @@
 package org.example.myloan.service;
 
 import org.example.myloan.domain.Application;
+import org.example.myloan.domain.Counsel;
 import org.example.myloan.dto.ApplicationDto;
 import org.example.myloan.dto.ApplicationDto.Request;
 import org.example.myloan.dto.ApplicationDto.Response;
+import org.example.myloan.dto.CounselDto;
 import org.example.myloan.exception.BaseException;
 import org.example.myloan.exception.ResultType;
 import org.example.myloan.repository.ApplicationRepository;
@@ -79,4 +81,28 @@ class ApplicationServiceTest {
         when(applicationRepository.findById(applicationId)).thenThrow(new BaseException(ResultType.SYSTEM_ERROR));
         assertThrows(BaseException.class, () -> applicationService.get(applicationId));
     }
+
+    @DisplayName("Update an Application")
+    @Test
+    void Should_ReturnUpdatedResponseOfExistApplicationEntity_When_RequestUpdateExistApplicationInfo() {
+        Long applicationId = 1L;
+        Application entity = Application.builder()
+                .applicationId(1L)
+                .hopeAmount(BigDecimal.valueOf(50000))
+                .build();
+
+        Request request = Request.builder()
+                .hopeAmount(BigDecimal.valueOf(60000))
+                .build();
+
+        when(applicationRepository.findById(applicationId)).thenReturn(Optional.of(entity));
+
+        Response actual = applicationService.update(applicationId, request);
+        assertThat(actual).isNotNull();
+        assertThat(actual.getApplicationId()).isSameAs(applicationId);
+        assertThat(actual.getName()).isSameAs(request.getName());
+
+    }
+
+
 }
