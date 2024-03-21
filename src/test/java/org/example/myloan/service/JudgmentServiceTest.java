@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
 class JudgmentServiceTest {
 
     @InjectMocks
-    JudgmentService judgmentService;
+    JudgmentServiceImpl judgmentService;
 
     @Mock
     ApplicationRepository applicationRepository;
@@ -67,6 +67,5 @@ class JudgmentServiceTest {
         assertThat(actual.getApprovalAmount()).isSameAs(judgment.getApprovalAmount());
 
     }
-
 
 }
