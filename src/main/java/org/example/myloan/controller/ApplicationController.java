@@ -8,6 +8,9 @@ import org.example.myloan.dto.ApplicationDto.Response;
 import org.example.myloan.dto.ResponseDTO;
 import org.example.myloan.service.ApplicationService;
 import org.example.myloan.service.FileStorageService;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -49,6 +52,16 @@ public class ApplicationController extends AbstractController{
     public ResponseDTO<Void> upload(@PathVariable Long applicationId, MultipartFile file) {
         fileStorageService.save(applicationId, file);
         return ok();
+    }
+
+    @GetMapping("/{applicationId}/files")
+    public ResponseEntity<Resource> download(@PathVariable Long applicationId, @RequestParam(value = "fileName") String fileName) {
+        Resource file = fileStorageService.load(applicationId, fileName);
+        return ResponseEntity.ok()
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=\"" + file.getFilename() + "\"")
+                .body(file);
     }
 
  }
