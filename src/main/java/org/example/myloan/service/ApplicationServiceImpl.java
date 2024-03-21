@@ -48,6 +48,8 @@ public class ApplicationServiceImpl implements ApplicationService{
 
     @Override
     public void delete(Long applicationId) {
-
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new BaseException(ResultType.SYSTEM_ERROR));
+        application.setIsDeleted(true);
     }
 }
