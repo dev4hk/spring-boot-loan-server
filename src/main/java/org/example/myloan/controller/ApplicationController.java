@@ -2,6 +2,7 @@ package org.example.myloan.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.myloan.dto.ApplicationDto;
+import org.example.myloan.dto.ApplicationDto.AcceptTerms;
 import org.example.myloan.dto.ApplicationDto.Request;
 import org.example.myloan.dto.ApplicationDto.Response;
 import org.example.myloan.dto.ResponseDTO;
@@ -34,5 +35,10 @@ public class ApplicationController extends AbstractController{
     public ResponseDTO<Response> delete(@PathVariable Long applicationId) {
         applicationService.delete(applicationId);
         return ok();
+    }
+
+    @PostMapping("/{applicationId}/terms")
+    public ResponseDTO<Boolean> acceptTerms(@PathVariable Long applicationId, @RequestBody AcceptTerms request) {
+        return null;
     }
  }

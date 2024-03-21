@@ -17,6 +17,8 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -95,5 +97,19 @@ class ApplicationControllerTest {
                 )
                 .andExpect(status().isOk());
         then(applicationService).should().delete(applicationId);
+    }
+
+    @DisplayName("[API][POST] Accept Terms")
+    @Test
+    public void acceptTerms() throws Exception {
+        Long applicationId = 1L;
+        ApplicationDto.AcceptTerms terms = ApplicationDto.AcceptTerms.builder().build();
+        given(applicationService.acceptTerms(anyLong(), any(ApplicationDto.AcceptTerms.class))).willReturn(true);
+        mvc.perform(post("/applications/{applicationId}/terms", applicationId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(terms))
+                )
+                .andExpect(status().isOk());
+        then(applicationService).should().acceptTerms(eq(applicationId), any(ApplicationDto.AcceptTerms.class));
     }
 }
