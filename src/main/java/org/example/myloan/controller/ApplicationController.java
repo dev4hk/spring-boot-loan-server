@@ -39,6 +39,6 @@ public class ApplicationController extends AbstractController{
 
     @PostMapping("/{applicationId}/terms")
     public ResponseDTO<Boolean> acceptTerms(@PathVariable Long applicationId, @RequestBody AcceptTerms request) {
-        return null;
+        return ok(applicationService.acceptTerms(applicationId, request));
     }
  }
