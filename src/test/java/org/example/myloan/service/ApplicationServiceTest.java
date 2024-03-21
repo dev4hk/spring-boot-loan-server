@@ -4,6 +4,8 @@ import org.example.myloan.domain.Application;
 import org.example.myloan.dto.ApplicationDto;
 import org.example.myloan.dto.ApplicationDto.Request;
 import org.example.myloan.dto.ApplicationDto.Response;
+import org.example.myloan.exception.BaseException;
+import org.example.myloan.exception.ResultType;
 import org.example.myloan.repository.ApplicationRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +21,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.when;
@@ -67,5 +70,13 @@ class ApplicationServiceTest {
         Response actual = applicationService.get(findId);
         assertThat(actual).isNotNull();
         assertThat(actual.getApplicationId()).isSameAs(findId);
+    }
+
+    @DisplayName("Get non-existing Application by id")
+    @Test
+    void Should_ThrowException_When_RequestNonExistApplicationId() {
+        Long applicationId = 1L;
+        when(applicationRepository.findById(applicationId)).thenThrow(new BaseException(ResultType.SYSTEM_ERROR));
+        assertThrows(BaseException.class, () -> applicationService.get(applicationId));
     }
 }
