@@ -33,6 +33,13 @@ public class JudgmentServiceImpl implements JudgmentService{
 
     @Override
     public Response get(Long judgmentId) {
+        Judgment judgment = judgmentRepository.findById(judgmentId)
+                .orElseThrow(() -> new BaseException(ResultType.SYSTEM_ERROR));
+        return modelMapper.map(judgment, Response.class);
+    }
+
+    @Override
+    public Response getJudgmentOfApplication(Long applicationId) {
         return null;
     }
 

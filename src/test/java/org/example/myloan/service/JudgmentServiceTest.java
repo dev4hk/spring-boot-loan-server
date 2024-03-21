@@ -81,4 +81,21 @@ class JudgmentServiceTest {
         assertThat(actual.getJudgmentId()).isSameAs(judgment.getJudgmentId());
     }
 
+    @DisplayName("Get Judgment by Application ID")
+    @Test
+    void Should_ReturnResponseOfExistJudgmentEntity_When_RequestExistApplicationId() {
+        Judgment judgment = Judgment.builder()
+                .applicationId(1L)
+                .build();
+
+        Application application = Application.builder()
+                .applicationId(1L)
+                .build();
+        when(applicationRepository.findById(1L)).thenReturn(Optional.ofNullable(application));
+        when(judgmentRepository.findByApplicationId(1L)).thenReturn(Optional.of(judgment));
+        Response actual = judgmentService.getJudgmentOfApplication(1L);
+
+        assertThat(actual.getJudgmentId()).isSameAs(judgment.getJudgmentId());
+    }
+
 }
