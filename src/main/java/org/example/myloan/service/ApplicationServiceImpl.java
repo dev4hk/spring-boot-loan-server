@@ -5,6 +5,8 @@ import org.example.myloan.domain.Application;
 import org.example.myloan.dto.ApplicationDto;
 import org.example.myloan.dto.ApplicationDto.Request;
 import org.example.myloan.dto.ApplicationDto.Response;
+import org.example.myloan.exception.BaseException;
+import org.example.myloan.exception.ResultType;
 import org.example.myloan.repository.ApplicationRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -25,7 +27,9 @@ public class ApplicationServiceImpl implements ApplicationService{
 
     @Override
     public Response get(Long applicationId) {
-        return null;
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new BaseException(ResultType.SYSTEM_ERROR));
+        return modelMapper.map(application, Response.class);
     }
 
     @Override
