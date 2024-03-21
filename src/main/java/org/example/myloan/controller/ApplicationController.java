@@ -22,6 +22,6 @@ public class ApplicationController extends AbstractController{
 
     @GetMapping("/{applicationId}")
     public ResponseDTO<Response> get(@PathVariable Long applicationId) {
-        return null;
+        return ok(applicationService.get(applicationId));
     }
  }
