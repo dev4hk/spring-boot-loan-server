@@ -30,7 +30,7 @@ public class Counsel extends BaseEntity {
     @Column(nullable = false, columnDefinition = "varchar(30) COMMENT 'Applicant Name'")
     private String name;
 
-    @Column(nullable = false, columnDefinition = "varchar(10) COMMENT 'Applicant Phone Number'")
+    @Column(nullable = false, columnDefinition = "varchar(12) COMMENT 'Applicant Phone Number'")
     private String cellPhone;
 
     @Column(columnDefinition = "varchar(50) DEFAULT NULL COMMENT 'Applicant Email'")
