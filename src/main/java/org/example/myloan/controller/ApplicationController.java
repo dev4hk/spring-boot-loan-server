@@ -20,6 +20,6 @@ public class ApplicationController extends AbstractController{
 
     @PostMapping
     public ResponseDTO<Response> create(@RequestBody Request request) {
-        return null;
+        return ok(applicationService.create(request));
     }
  }

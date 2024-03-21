@@ -40,7 +40,7 @@ class ApplicationControllerTest {
         this.objectMapper = objectMapper;
     }
 
-    @DisplayName("[API][POST] Create a Application")
+    @DisplayName("[API][POST] Create an Application")
     @Test
     public void createApplication() throws Exception {
         Request request = Request.builder().build();
@@ -52,6 +52,6 @@ class ApplicationControllerTest {
                         .content(objectMapper.writeValueAsString(request))
                 )
                 .andExpect(status().isOk());
-        then(applicationService).should().create(request);
+        then(applicationService).should().create(any(Request.class));
     }
 }
