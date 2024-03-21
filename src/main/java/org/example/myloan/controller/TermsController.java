@@ -25,6 +25,6 @@ public class TermsController {
 
     @GetMapping
     public ResponseDTO<List<Response>> getAll() {
-        return null;
+        return ok(termsService.getAll());
     }
 }
