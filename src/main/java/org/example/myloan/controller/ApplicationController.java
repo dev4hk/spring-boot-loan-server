@@ -80,4 +80,10 @@ public class ApplicationController extends AbstractController{
         return ok(filesInfo);
     }
 
+    @DeleteMapping("/{applicationId}/files")
+    public ResponseDTO<Void> deleteAll(@PathVariable Long applicationId) {
+        fileStorageService.deleteAll(applicationId);
+        return ok();
+    }
+
  }
