@@ -7,7 +7,9 @@ import org.example.myloan.dto.ApplicationDto.Request;
 import org.example.myloan.dto.ApplicationDto.Response;
 import org.example.myloan.dto.ResponseDTO;
 import org.example.myloan.service.ApplicationService;
+import org.example.myloan.service.FileStorageService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RequiredArgsConstructor
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class ApplicationController extends AbstractController{
     private final ApplicationService applicationService;
+    private final FileStorageService fileStorageService;
 
     @PostMapping
     public ResponseDTO<Response> create(@RequestBody Request request) {
@@ -41,4 +44,11 @@ public class ApplicationController extends AbstractController{
     public ResponseDTO<Boolean> acceptTerms(@PathVariable Long applicationId, @RequestBody AcceptTerms request) {
         return ok(applicationService.acceptTerms(applicationId, request));
     }
+
+    @PostMapping("/{applicationId}/files")
+    public ResponseDTO<Void> upload(@PathVariable Long applicationId, MultipartFile file) {
+        fileStorageService.save(applicationId, file);
+        return ok();
+    }
+
  }
