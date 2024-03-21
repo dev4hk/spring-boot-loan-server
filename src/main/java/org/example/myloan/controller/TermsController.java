@@ -5,10 +5,7 @@ import org.example.myloan.dto.ResponseDTO;
 import org.example.myloan.dto.TermsDto.Request;
 import org.example.myloan.dto.TermsDto.Response;
 import org.example.myloan.service.TermsService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static org.example.myloan.dto.ResponseDTO.ok;
 
@@ -22,5 +19,10 @@ public class TermsController {
     @PostMapping
     public ResponseDTO<Response> create(@RequestBody Request request) {
         return ok(termsService.create(request));
+    }
+
+    @GetMapping
+    public ResponseDTO<Response> getAll() {
+        return null;
     }
 }
