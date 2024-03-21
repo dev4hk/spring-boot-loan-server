@@ -2,10 +2,11 @@ package org.example.myloan.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class ApplicationDto {
+public class ApplicationDto implements Serializable {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder

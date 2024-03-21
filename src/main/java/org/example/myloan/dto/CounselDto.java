@@ -2,9 +2,10 @@ package org.example.myloan.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class CounselDto {
+public class CounselDto implements Serializable {
 
     @NoArgsConstructor
     @AllArgsConstructor
