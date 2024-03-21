@@ -113,4 +113,24 @@ class ApplicationServiceTest {
         when(applicationRepository.findById(applicationId)).thenThrow(new BaseException(ResultType.SYSTEM_ERROR));
         assertThrows(BaseException.class, () -> applicationService.update(applicationId, request));
     }
+
+    @DisplayName("Delete an Application by id")
+    @Test
+    void Should_DeleteApplicationEntity_When_RequestDeleteExistApplication() {
+        Long applicationId = 1L;
+        Application entity = Application.builder()
+                .applicationId(1L)
+                .build();
+        when(applicationRepository.findById(applicationId)).thenReturn(Optional.of(entity));
+        applicationService.delete(applicationId);
+        assertThat(entity.getIsDeleted()).isSameAs(true);
+    }
+
+    @DisplayName("Delete non-existing Application")
+    @Test
+    void Should_DeleteApplicationEntity_When_RequestDeleteNonExistApplication() {
+        Long applicationId = 1L;
+        when(applicationRepository.findById(applicationId)).thenThrow(new BaseException(ResultType.SYSTEM_ERROR));
+        assertThrows(BaseException.class, () -> applicationService.delete(applicationId));
+    }
 }
