@@ -91,7 +91,7 @@ class JudgmentServiceTest {
         Application application = Application.builder()
                 .applicationId(1L)
                 .build();
-        when(applicationRepository.findById(1L)).thenReturn(Optional.ofNullable(application));
+        when(applicationRepository.findById(1L)).thenReturn(Optional.of(application));
         when(judgmentRepository.findByApplicationId(1L)).thenReturn(Optional.of(judgment));
         Response actual = judgmentService.getJudgmentOfApplication(1L);
 
