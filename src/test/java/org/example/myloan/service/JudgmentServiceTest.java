@@ -57,7 +57,7 @@ class JudgmentServiceTest {
                 .approvalAmount(BigDecimal.valueOf(5000))
                 .build();
 
-        when(applicationRepository.findById(1L)).thenReturn(Optional.ofNullable(Application.builder().build()));
+        when(applicationRepository.findById(1L)).thenReturn(Optional.of(Application.builder().build()));
         when(judgmentRepository.save(any(Judgment.class))).thenReturn(judgment);
 
         Response actual = judgmentService.create(request);
@@ -65,7 +65,20 @@ class JudgmentServiceTest {
         assertThat(actual.getName()).isSameAs(judgment.getName());
         assertThat(actual.getApplicationId()).isSameAs(judgment.getApplicationId());
         assertThat(actual.getApprovalAmount()).isSameAs(judgment.getApprovalAmount());
+    }
 
+    @DisplayName("Get Judgment")
+    @Test
+    void Should_ReturnResponseOfExistJudgmentEntity_When_RequestExistJudgmentId() {
+        Judgment judgment = Judgment.builder()
+                .applicationId(1L)
+                .build();
+
+        when(judgmentRepository.findById(1L)).thenReturn(Optional.of(judgment));
+        Response actual = judgmentService.get(1L);
+
+        assertThat(actual).isNotNull();
+        assertThat(actual.getJudgmentId()).isSameAs(judgment.getJudgmentId());
     }
 
 }

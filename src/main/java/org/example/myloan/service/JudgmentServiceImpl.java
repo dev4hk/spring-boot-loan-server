@@ -31,6 +31,11 @@ public class JudgmentServiceImpl implements JudgmentService{
         return modelMapper.map(created, Response.class);
     }
 
+    @Override
+    public Response get(Long judgmentId) {
+        return null;
+    }
+
     private boolean isPresentApplication(Long applicationId) {
         return applicationRepository.findById(applicationId).isPresent();
     }
