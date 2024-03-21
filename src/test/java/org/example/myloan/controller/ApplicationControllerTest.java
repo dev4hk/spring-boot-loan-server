@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -53,5 +54,19 @@ class ApplicationControllerTest {
                 )
                 .andExpect(status().isOk());
         then(applicationService).should().create(any(Request.class));
+    }
+
+    @DisplayName("[API][GET] Get an Application by ApplicationId")
+    @Test
+    public void getApplicationById() throws Exception {
+        Long applicationId = 1L;
+        Response response = Response.builder().build();
+        given(applicationService.create(any(Request.class)))
+                .willReturn(response);
+        mvc.perform(get("/applications/{applicationId}", applicationId)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk());
+        then(applicationService).should().get(applicationId);
     }
 }
