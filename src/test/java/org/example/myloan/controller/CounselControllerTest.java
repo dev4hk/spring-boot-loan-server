@@ -28,7 +28,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Test - Counsel Controller")
-@Import(ModelMapperConfig.class)
 @MockBean(JpaMetamodelMappingContext.class)
 @WebMvcTest(CounselController.class)
 class CounselControllerTest {
