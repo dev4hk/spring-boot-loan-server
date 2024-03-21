@@ -7,6 +7,8 @@ import org.example.myloan.dto.TermsDto.Response;
 import org.example.myloan.service.TermsService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static org.example.myloan.dto.ResponseDTO.ok;
 
 @RequiredArgsConstructor
@@ -22,7 +24,7 @@ public class TermsController {
     }
 
     @GetMapping
-    public ResponseDTO<Response> getAll() {
+    public ResponseDTO<List<Response>> getAll() {
         return null;
     }
 }
