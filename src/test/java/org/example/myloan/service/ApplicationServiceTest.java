@@ -113,6 +113,4 @@ class ApplicationServiceTest {
         when(applicationRepository.findById(applicationId)).thenThrow(new BaseException(ResultType.SYSTEM_ERROR));
         assertThrows(BaseException.class, () -> applicationService.update(applicationId, request));
     }
-
-
 }

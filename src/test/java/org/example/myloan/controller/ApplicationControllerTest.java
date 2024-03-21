@@ -19,10 +19,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Test - Application Controller")
@@ -68,5 +68,21 @@ class ApplicationControllerTest {
                 )
                 .andExpect(status().isOk());
         then(applicationService).should().get(applicationId);
+    }
+
+    @DisplayName("[API][PUT] Update an Application")
+    @Test
+    public void updateApplication() throws Exception {
+        Long applicationId = 1L;
+        Request request = Request.builder().build();
+        Response response = Response.builder().build();
+        given(applicationService.update(applicationId, request))
+                .willReturn(response);
+        mvc.perform(put("/applications/{applicationId}", applicationId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isOk());
+        then(applicationService).should().update(eq(applicationId), any(Request.class));
     }
 }
