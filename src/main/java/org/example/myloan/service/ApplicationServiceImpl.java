@@ -1,6 +1,7 @@
 package org.example.myloan.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.myloan.domain.AcceptTerms;
 import org.example.myloan.domain.Application;
 import org.example.myloan.dto.ApplicationDto;
 import org.example.myloan.dto.ApplicationDto.Request;
@@ -8,6 +9,7 @@ import org.example.myloan.dto.ApplicationDto.Response;
 import org.example.myloan.exception.BaseException;
 import org.example.myloan.exception.ResultType;
 import org.example.myloan.repository.ApplicationRepository;
+import org.example.myloan.repository.TermsRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ import java.time.LocalDateTime;
 @Service
 public class ApplicationServiceImpl implements ApplicationService{
     private final ApplicationRepository applicationRepository;
+    private final TermsRepository termsRepository;
     private final ModelMapper modelMapper;
 
     @Override
@@ -55,4 +58,11 @@ public class ApplicationServiceImpl implements ApplicationService{
                 .orElseThrow(() -> new BaseException(ResultType.SYSTEM_ERROR));
         application.setIsDeleted(true);
     }
+
+    @Override
+    public Boolean acceptTerms(Long applicationId, ApplicationDto.AcceptTerms request) {
+        return null;
+    }
+
+
 }

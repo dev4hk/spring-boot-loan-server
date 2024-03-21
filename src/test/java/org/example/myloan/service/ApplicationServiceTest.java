@@ -1,14 +1,18 @@
 package org.example.myloan.service;
 
+import org.example.myloan.domain.AcceptTerms;
 import org.example.myloan.domain.Application;
 import org.example.myloan.domain.Counsel;
+import org.example.myloan.domain.Terms;
 import org.example.myloan.dto.ApplicationDto;
 import org.example.myloan.dto.ApplicationDto.Request;
 import org.example.myloan.dto.ApplicationDto.Response;
 import org.example.myloan.dto.CounselDto;
 import org.example.myloan.exception.BaseException;
 import org.example.myloan.exception.ResultType;
+import org.example.myloan.repository.AcceptTermsRepository;
 import org.example.myloan.repository.ApplicationRepository;
+import org.example.myloan.repository.TermsRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,8 +22,11 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,6 +42,10 @@ class ApplicationServiceTest {
     ApplicationServiceImpl applicationService;
     @Mock
     ApplicationRepository applicationRepository;
+    @Mock
+    TermsRepository termsRepository;
+    @Mock
+    AcceptTermsRepository acceptTermsRepository;
     @Spy
     ModelMapper modelMapper;
 
@@ -132,5 +143,87 @@ class ApplicationServiceTest {
         Long applicationId = 1L;
         when(applicationRepository.findById(applicationId)).thenThrow(new BaseException(ResultType.SYSTEM_ERROR));
         assertThrows(BaseException.class, () -> applicationService.delete(applicationId));
+    }
+
+    @DisplayName("Add Accepted Terms")
+    @Test
+    void Should_AddAcceptTerms_When_RequestAcceptTermsOfApplication() {
+        Terms terms1 = Terms.builder()
+                .termsId(1L)
+                .name("Terms 1")
+                .termsDetailUrl("https://testTermsUrl.abc/terms1")
+                .build();
+        Terms terms2 = Terms.builder()
+                .termsId(2L)
+                .name("Terms 2")
+                .termsDetailUrl("https://testTermsUrl.abc/terms2")
+                .build();
+        List<Long> acceptTerms = Arrays.asList(1L, 2L);
+        ApplicationDto.AcceptTerms request = ApplicationDto.AcceptTerms.builder()
+                .acceptTermsIds(acceptTerms)
+                .build();
+        Long findId = 1L;
+        when(applicationRepository.findById(findId))
+                .thenReturn(Optional.of(Application.builder().build()));
+        when(termsRepository.findAll(Sort.by(Sort.Direction.ASC, "termsId")))
+                .thenReturn(Arrays.asList(terms1, terms2));
+        when(acceptTermsRepository.save(any(AcceptTerms.class)))
+                .thenReturn(AcceptTerms.builder().build());
+        Boolean actual = applicationService.acceptTerms(findId, request);
+        assertThat(actual).isNotNull();
+        assertThat(actual).isTrue();
+    }
+
+    @DisplayName("Throw Exception When Applicant Does Not Accept All Terms")
+    @Test
+    void Should_ThrowException_When_RequestNotAllAcceptTermsOfApplication() {
+        Terms terms1 = Terms.builder()
+                .termsId(1L)
+                .name("Terms 1")
+                .termsDetailUrl("https://testTermsUrl.abc/terms1")
+                .build();
+
+        Terms terms2 = Terms.builder()
+                .termsId(2L)
+                .name("Terms 2")
+                .termsDetailUrl("https://testTermsUrl.abc/terms2")
+                .build();
+        List<Long> acceptTerms = Arrays.asList(1L);
+        ApplicationDto.AcceptTerms request = ApplicationDto.AcceptTerms.builder()
+                .acceptTermsIds(acceptTerms)
+                .build();
+        Long findId = 1L;
+        when(applicationRepository.findById(findId))
+                .thenReturn(Optional.of(Application.builder().build()));
+        when(termsRepository.findAll(Sort.by(Sort.Direction.ASC, "termsId")))
+                .thenReturn(Arrays.asList(terms1, terms2));
+        assertThrows(BaseException.class, () -> applicationService.acceptTerms(findId, request));
+
+    }
+
+    @DisplayName("Throw Exception When Accepting Non-existing Terms")
+    @Test
+    void Should_ThrowException_When_RequestNotExistTermsOfApplication() {
+        Terms terms1 = Terms.builder()
+                .termsId(1L)
+                .name("Terms 1")
+                .termsDetailUrl("https://testTermsUrl.abc/terms1")
+                .build();
+        Terms terms2 = Terms.builder()
+                .termsId(2L)
+                .name("Terms 2")
+                .termsDetailUrl("https://testTermsUrl.abc/terms2")
+                .build();
+        List<Long> acceptTerms = Arrays.asList(1L, 3L);
+        ApplicationDto.AcceptTerms request = ApplicationDto.AcceptTerms.builder()
+                .acceptTermsIds(acceptTerms)
+                .build();
+        Long findId = 1L;
+        when(applicationRepository.findById(findId))
+                .thenReturn(Optional.of(Application.builder().build()));
+        when(termsRepository.findAll(Sort.by(Sort.Direction.ASC, "termsId")))
+                .thenReturn(Arrays.asList(terms1, terms2));
+        assertThrows(BaseException.class, () -> applicationService.acceptTerms(findId, request));
+
     }
 }
