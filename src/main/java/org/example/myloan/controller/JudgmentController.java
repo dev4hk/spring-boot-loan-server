@@ -21,7 +21,7 @@ public class JudgmentController {
 
     @PostMapping
     public ResponseDTO<Response> create(@RequestBody Request request) {
-        return null;
+        return ok(judgmentService.create(request));
     }
 
     @GetMapping("/{judgmentId}")
