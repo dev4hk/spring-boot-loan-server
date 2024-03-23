@@ -1,0 +1,47 @@
+package org.example.myloan.controller;
+
+import lombok.RequiredArgsConstructor;
+import org.example.myloan.dto.ApplicationDto;
+import org.example.myloan.dto.ApplicationDto.GrantAmount;
+import org.example.myloan.dto.JudgmentDto;
+import org.example.myloan.dto.JudgmentDto.Request;
+import org.example.myloan.dto.JudgmentDto.Response;
+import org.example.myloan.dto.ResponseDTO;
+import org.example.myloan.service.JudgmentService;
+import org.springframework.web.bind.annotation.*;
+
+import static org.example.myloan.dto.ResponseDTO.ok;
+
+@RequiredArgsConstructor
+@RequestMapping("/judgments")
+@RestController
+public class JudgmentController {
+
+    private final JudgmentService judgmentService;
+
+    @GetMapping("/{judgmentId}")
+    public ResponseDTO<Response> get(@PathVariable Long judgmentId) {
+        return null;
+    }
+
+    @GetMapping("/applications/{applicationId}")
+    public ResponseDTO<Response> getJudgmentOfApplication(@PathVariable Long applicationId) {
+        return null;
+    }
+
+    @PutMapping("/{judgmentId}")
+    public ResponseDTO<Response> update(@PathVariable Long judgmentId, @RequestBody Request request) {
+        return null;
+    }
+
+    @DeleteMapping("/{judgmentId}")
+    public ResponseDTO<Void> delete(@PathVariable Long judgmentId) {
+        judgmentService.delete(judgmentId);
+        return null;
+    }
+
+    @PatchMapping("/{judgmentId}/grants")
+    public ResponseDTO<GrantAmount> grant(@PathVariable Long judgmentId) {
+        return null;
+    }
+}
