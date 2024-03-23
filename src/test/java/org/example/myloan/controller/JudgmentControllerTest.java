@@ -2,6 +2,7 @@ package org.example.myloan.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.myloan.dto.ApplicationDto;
+import org.example.myloan.dto.ApplicationDto.GrantAmount;
 import org.example.myloan.dto.JudgmentDto;
 import org.example.myloan.dto.JudgmentDto.Request;
 import org.example.myloan.dto.JudgmentDto.Response;
@@ -107,5 +108,19 @@ class JudgmentControllerTest {
                 )
                 .andExpect(status().isOk());
         then(judgmentService).should().delete(judgmentId);
+    }
+
+    @DisplayName("[API][PATCH] Update Grant")
+    @Test
+    public void updateGrant() throws Exception {
+        Long judgmentId = 1L;
+        GrantAmount grantAmount = GrantAmount.builder().build();
+        given(judgmentService.grant(judgmentId))
+                .willReturn(grantAmount);
+        mvc.perform(patch("/judgments/{judgmentId}/grants", judgmentId)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk());
+        then(judgmentService).should().grant(judgmentId);
     }
 }
