@@ -98,4 +98,27 @@ class JudgmentServiceTest {
         assertThat(actual.getJudgmentId()).isSameAs(judgment.getJudgmentId());
     }
 
+    @DisplayName("Update Judgment")
+    @Test
+    void Should_ReturnUpdatedResponseOfExistJudgmentEntity_When_RequestUpdateExistJudgmentInfo() {
+        Judgment judgment = Judgment.builder()
+                .judgmentId(1L)
+                .name("Member Kim")
+                .approvalAmount(BigDecimal.valueOf(5000))
+                .build();
+
+        Request request = Request.builder()
+                .name("Member Lee")
+                .approvalAmount(BigDecimal.valueOf(10000))
+                .build();
+
+        when(judgmentRepository.findById(1L)).thenReturn(Optional.of(judgment));
+
+        Response actual = judgmentService.update(1L, request);
+        assertThat(actual).isNotNull();
+        assertThat(actual.getJudgmentId()).isSameAs(1L);
+        assertThat(actual.getName()).isSameAs(request.getName());
+        assertThat(actual.getApprovalAmount()).isSameAs(request.getApprovalAmount());
+    }
+
 }
