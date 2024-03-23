@@ -19,6 +19,11 @@ public class JudgmentController {
 
     private final JudgmentService judgmentService;
 
+    @PostMapping
+    public ResponseDTO<Response> create(@RequestBody Request request) {
+        return null;
+    }
+
     @GetMapping("/{judgmentId}")
     public ResponseDTO<Response> get(@PathVariable Long judgmentId) {
         return null;
