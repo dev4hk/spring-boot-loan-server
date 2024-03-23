@@ -41,7 +41,6 @@ public class JudgmentController {
 
     @DeleteMapping("/{judgmentId}")
     public ResponseDTO<Void> delete(@PathVariable Long judgmentId) {
-        judgmentService.delete(judgmentId);
         return null;
     }
 
