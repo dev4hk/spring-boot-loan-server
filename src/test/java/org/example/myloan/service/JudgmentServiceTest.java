@@ -152,7 +152,6 @@ class JudgmentServiceTest {
 
         when(judgmentRepository.findById(1L)).thenReturn(Optional.ofNullable(judgment));
         when(applicationRepository.findById(1L)).thenReturn(Optional.ofNullable(application));
-        when(applicationRepository.save(any(Application.class))).thenReturn(application);
 
         GrantAmount actual = judgmentService.grant(1L);
         assertThat(actual).isNotNull();
