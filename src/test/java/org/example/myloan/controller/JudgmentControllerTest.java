@@ -56,7 +56,7 @@ class JudgmentControllerTest {
 
     @DisplayName("[API][GET] Get an Judgment by JudgmentId")
     @Test
-    public void getJudgmentById() throws Exception {
+    public void getJudgmentByJudgmentId() throws Exception {
         Long judgmentId = 1L;
         Response response = Response.builder().build();
         given(judgmentService.create(any(Request.class)))
@@ -66,5 +66,19 @@ class JudgmentControllerTest {
                 )
                 .andExpect(status().isOk());
         then(judgmentService).should().get(judgmentId);
+    }
+
+    @DisplayName("[API][GET] Get an Judgment by ApplicationId")
+    @Test
+    public void getJudgmentByApplicationId() throws Exception {
+        Long applicationId = 1L;
+        Response response = Response.builder().build();
+        given(judgmentService.create(any(Request.class)))
+                .willReturn(response);
+        mvc.perform(get("/judgments/applications/{applicationId}", applicationId)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk());
+        then(judgmentService).should().getJudgmentOfApplication(applicationId);
     }
 }
