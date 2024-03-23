@@ -11,9 +11,11 @@ import org.example.myloan.repository.ApplicationRepository;
 import org.example.myloan.repository.JudgmentRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@Service
 @RequiredArgsConstructor
+@Transactional
+@Service
 public class JudgmentServiceImpl implements JudgmentService{
 
     private final ApplicationRepository applicationRepository;
@@ -31,6 +33,7 @@ public class JudgmentServiceImpl implements JudgmentService{
         return modelMapper.map(created, Response.class);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Response get(Long judgmentId) {
         Judgment judgment = judgmentRepository.findById(judgmentId)
@@ -38,6 +41,7 @@ public class JudgmentServiceImpl implements JudgmentService{
         return modelMapper.map(judgment, Response.class);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Response getJudgmentOfApplication(Long applicationId) {
         if(!isPresentApplication(applicationId)) {
@@ -45,6 +49,15 @@ public class JudgmentServiceImpl implements JudgmentService{
         }
         Judgment judgment = judgmentRepository.findByApplicationId(applicationId)
                 .orElseThrow(() -> new BaseException(ResultType.SYSTEM_ERROR));
+        return modelMapper.map(judgment, Response.class);
+    }
+
+    @Override
+    public Response update(Long judgmentId, Request request) {
+        Judgment judgment = judgmentRepository.findById(judgmentId)
+                .orElseThrow(() -> new BaseException(ResultType.SYSTEM_ERROR));
+        judgment.setName(request.getName());
+        judgment.setApprovalAmount(request.getApprovalAmount());
         return modelMapper.map(judgment, Response.class);
     }
 
