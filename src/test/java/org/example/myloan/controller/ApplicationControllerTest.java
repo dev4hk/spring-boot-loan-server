@@ -124,7 +124,9 @@ class ApplicationControllerTest {
         Response response = Response.builder().build();
         given(applicationService.contract(applicationId))
                 .willReturn(response);
-        mvc.perform(put("/{applicationId}/contract", applicationId))
+        mvc.perform(put("/applications/{applicationId}/contract", applicationId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
                 .andExpect(status().isOk());
         then(applicationService).should().contract(applicationId);
     }
