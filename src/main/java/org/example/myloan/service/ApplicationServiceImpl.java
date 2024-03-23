@@ -95,4 +95,9 @@ public class ApplicationServiceImpl implements ApplicationService{
         return true;
     }
 
+    @Override
+    public Response contract(Long applicationId) {
+        return null;
+    }
+
 }

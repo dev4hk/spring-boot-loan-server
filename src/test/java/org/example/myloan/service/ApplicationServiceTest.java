@@ -1,9 +1,6 @@
 package org.example.myloan.service;
 
-import org.example.myloan.domain.AcceptTerms;
-import org.example.myloan.domain.Application;
-import org.example.myloan.domain.Counsel;
-import org.example.myloan.domain.Terms;
+import org.example.myloan.domain.*;
 import org.example.myloan.dto.ApplicationDto;
 import org.example.myloan.dto.ApplicationDto.Request;
 import org.example.myloan.dto.ApplicationDto.Response;
@@ -12,6 +9,7 @@ import org.example.myloan.exception.BaseException;
 import org.example.myloan.exception.ResultType;
 import org.example.myloan.repository.AcceptTermsRepository;
 import org.example.myloan.repository.ApplicationRepository;
+import org.example.myloan.repository.JudgmentRepository;
 import org.example.myloan.repository.TermsRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,6 +44,8 @@ class ApplicationServiceTest {
     TermsRepository termsRepository;
     @Mock
     AcceptTermsRepository acceptTermsRepository;
+    @Mock
+    JudgmentRepository judgmentRepository;
     @Spy
     ModelMapper modelMapper;
 
@@ -225,5 +225,19 @@ class ApplicationServiceTest {
                 .thenReturn(Arrays.asList(terms1, terms2));
         assertThrows(BaseException.class, () -> applicationService.acceptTerms(findId, request));
 
+    }
+
+    @DisplayName("Contract based on the application")
+    @Test
+    void Should_MarkValidContract_When_RequestContractOfApplication() {
+        Long applicationId = 1L;
+        Application application = Application.builder().approvalAmount(BigDecimal.valueOf(200)).build();
+        when(applicationRepository.findById(applicationId))
+                .thenReturn(Optional.of(application));
+        when(judgmentRepository.findByApplicationId(applicationId))
+                .thenReturn(Optional.of(Judgment.builder().build()));
+        Response actual = applicationService.contract(applicationId);
+        assertThat(actual).isNotNull();
+        assertThat(actual.getContractedAt()).isNotNull();
     }
 }
