@@ -2,6 +2,7 @@ package org.example.myloan.service;
 
 import lombok.RequiredArgsConstructor;
 import org.example.myloan.domain.Judgment;
+import org.example.myloan.dto.ApplicationDto;
 import org.example.myloan.dto.JudgmentDto;
 import org.example.myloan.dto.JudgmentDto.Request;
 import org.example.myloan.dto.JudgmentDto.Response;
@@ -68,7 +69,13 @@ public class JudgmentServiceImpl implements JudgmentService{
         judgment.setIsDeleted(true);
     }
 
+    @Override
+    public ApplicationDto.GrantAmount grant(Long judgmentId) {
+        return null;
+    }
+
     private boolean isPresentApplication(Long applicationId) {
         return applicationRepository.findById(applicationId).isPresent();
     }
+
 }

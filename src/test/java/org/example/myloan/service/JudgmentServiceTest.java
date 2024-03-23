@@ -3,6 +3,8 @@ package org.example.myloan.service;
 import org.example.myloan.domain.Application;
 import org.example.myloan.domain.Judgment;
 import org.example.myloan.domain.Terms;
+import org.example.myloan.dto.ApplicationDto;
+import org.example.myloan.dto.ApplicationDto.GrantAmount;
 import org.example.myloan.dto.JudgmentDto;
 import org.example.myloan.dto.JudgmentDto.Request;
 import org.example.myloan.dto.JudgmentDto.Response;
@@ -132,6 +134,30 @@ class JudgmentServiceTest {
 
         judgmentService.delete(1L);
         assertThat(judgment.getIsDeleted()).isTrue();
+    }
+
+    @DisplayName("Update Grant Amount from Judgment to Application")
+    @Test
+    void Should_ReturnUpdateResponseOfExistApplicationEntity_When_RequestGrantApprovalAmountOfJudgmentInfo() {
+        Judgment judgment = Judgment.builder()
+                .applicationId(1L)
+                .name("Member Kim")
+                .approvalAmount(BigDecimal.valueOf(5000))
+                .build();
+
+        Application application = Application.builder()
+                .applicationId(1L)
+                .approvalAmount(BigDecimal.valueOf(5000))
+                .build();
+
+        when(judgmentRepository.findById(1L)).thenReturn(Optional.ofNullable(judgment));
+        when(applicationRepository.findById(1L)).thenReturn(Optional.ofNullable(application));
+        when(applicationRepository.save(any(Application.class))).thenReturn(application);
+
+        GrantAmount actual = judgmentService.grant(1L);
+        assertThat(actual).isNotNull();
+        assertThat(actual.getApplicationId()).isSameAs(1L);
+        assertThat(actual.getApprovalAmount()).isSameAs(judgment.getApprovalAmount());
     }
 
 }
