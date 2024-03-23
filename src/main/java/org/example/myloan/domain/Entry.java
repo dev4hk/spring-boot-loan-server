@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.Where;
 
 import java.math.BigDecimal;
@@ -16,7 +17,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @DynamicInsert
 @DynamicUpdate
-@Where(clause = "is_deleted=false")
+@SQLRestriction("is_deleted=false")
 public class Entry extends BaseEntity{
 
     @Id
