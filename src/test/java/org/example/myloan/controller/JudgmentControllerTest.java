@@ -18,8 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -96,5 +95,17 @@ class JudgmentControllerTest {
                 )
                 .andExpect(status().isOk());
         then(judgmentService).should().update(eq(judgmentId), any(Request.class));
+    }
+
+    @DisplayName("[API][DELETE] Delete a Judgment")
+    @Test
+    public void deleteJudgment() throws Exception {
+        Long judgmentId = 1L;
+        willDoNothing().given(judgmentService).delete(judgmentId);
+        mvc.perform(delete("/judgments/{judgmentId}", judgmentId)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk());
+        then(judgmentService).should().delete(judgmentId);
     }
 }
