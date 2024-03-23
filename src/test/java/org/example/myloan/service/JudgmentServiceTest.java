@@ -121,4 +121,17 @@ class JudgmentServiceTest {
         assertThat(actual.getApprovalAmount()).isSameAs(request.getApprovalAmount());
     }
 
+    @DisplayName("Delete Judgment")
+    @Test
+    void Should_DeletedJudgmentEntity_When_RequestDeleteExistJudgmentInfo() {
+        Judgment judgment = Judgment.builder()
+                .judgmentId(1L)
+                .build();
+
+        when(judgmentRepository.findById(1L)).thenReturn(Optional.of(judgment));
+
+        judgmentService.delete(1L);
+        assertThat(judgment.getIsDeleted()).isTrue();
+    }
+
 }
