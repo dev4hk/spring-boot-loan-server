@@ -11,12 +11,15 @@ import org.example.myloan.exception.BaseException;
 import org.example.myloan.exception.ResultType;
 import org.example.myloan.repository.AcceptTermsRepository;
 import org.example.myloan.repository.ApplicationRepository;
+import org.example.myloan.repository.JudgmentRepository;
 import org.example.myloan.repository.TermsRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashSet;
@@ -31,6 +34,7 @@ public class ApplicationServiceImpl implements ApplicationService{
     private final ApplicationRepository applicationRepository;
     private final TermsRepository termsRepository;
     private final AcceptTermsRepository acceptTermsRepository;
+    private final JudgmentRepository judgmentRepository;
     private final ModelMapper modelMapper;
 
     @Override
@@ -97,7 +101,18 @@ public class ApplicationServiceImpl implements ApplicationService{
 
     @Override
     public Response contract(Long applicationId) {
-        return null;
+        Application application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new BaseException(ResultType.SYSTEM_ERROR));
+        judgmentRepository.findByApplicationId((applicationId))
+                .orElseThrow(() -> new BaseException(ResultType.SYSTEM_ERROR));
+        if(application.getApprovalAmount() == null
+            || application.getApprovalAmount().compareTo(BigDecimal.ZERO) == 0
+        ) {
+            throw new BaseException(ResultType.SYSTEM_ERROR);
+        }
+
+        application.setContractedAt(LocalDateTime.now());
+        return modelMapper.map(application, Response.class);
     }
 
 }
