@@ -31,7 +31,7 @@ public class JudgmentController {
 
     @GetMapping("/applications/{applicationId}")
     public ResponseDTO<Response> getJudgmentOfApplication(@PathVariable Long applicationId) {
-        return null;
+        return ok(judgmentService.getJudgmentOfApplication(applicationId));
     }
 
     @PutMapping("/{judgmentId}")
