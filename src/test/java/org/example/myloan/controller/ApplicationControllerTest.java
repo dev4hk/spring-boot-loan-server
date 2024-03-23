@@ -8,6 +8,7 @@ import org.example.myloan.dto.CounselDto;
 import org.example.myloan.service.ApplicationService;
 import org.example.myloan.service.CounselService;
 import org.example.myloan.service.CounselServiceImpl;
+import org.example.myloan.service.FileStorageService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,9 @@ class ApplicationControllerTest {
 
     @MockBean
     private ApplicationService applicationService;
+
+    @MockBean
+    private FileStorageService fileStorageService;
 
     ApplicationControllerTest(@Autowired MockMvc mvc, @Autowired ObjectMapper objectMapper) {
         this.mvc = mvc;
@@ -111,5 +115,17 @@ class ApplicationControllerTest {
                 )
                 .andExpect(status().isOk());
         then(applicationService).should().acceptTerms(eq(applicationId), any(ApplicationDto.AcceptTerms.class));
+    }
+
+    @DisplayName("[API][PUT] Contract an Application")
+    @Test
+    public void contractApplication() throws Exception {
+        Long applicationId = 1L;
+        Response response = Response.builder().build();
+        given(applicationService.contract(applicationId))
+                .willReturn(response);
+        mvc.perform(put("/{applicationId}/contract", applicationId))
+                .andExpect(status().isOk());
+        then(applicationService).should().contract(applicationId);
     }
 }
