@@ -47,6 +47,6 @@ public class JudgmentController {
 
     @PatchMapping("/{judgmentId}/grants")
     public ResponseDTO<GrantAmount> grant(@PathVariable Long judgmentId) {
-        return null;
+        return ok(judgmentService.grant(judgmentId));
     }
 }
