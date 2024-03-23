@@ -26,7 +26,7 @@ public class JudgmentController {
 
     @GetMapping("/{judgmentId}")
     public ResponseDTO<Response> get(@PathVariable Long judgmentId) {
-        return null;
+        return ok(judgmentService.get(judgmentId));
     }
 
     @GetMapping("/applications/{applicationId}")
