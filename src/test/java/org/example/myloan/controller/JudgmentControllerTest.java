@@ -17,10 +17,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Test - Judgment Controller")
@@ -80,5 +80,21 @@ class JudgmentControllerTest {
                 )
                 .andExpect(status().isOk());
         then(judgmentService).should().getJudgmentOfApplication(applicationId);
+    }
+
+    @DisplayName("[API][PUT] Update a Judgment")
+    @Test
+    public void updateJudgment() throws Exception {
+        Long judgmentId = 1L;
+        Request request = Request.builder().build();
+        Response response = Response.builder().build();
+        given(judgmentService.update(judgmentId, request))
+                .willReturn(response);
+        mvc.perform(put("/judgments/{judgmentId}", judgmentId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isOk());
+        then(judgmentService).should().update(eq(judgmentId), any(Request.class));
     }
 }
