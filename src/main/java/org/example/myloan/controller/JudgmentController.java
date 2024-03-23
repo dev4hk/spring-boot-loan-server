@@ -36,7 +36,7 @@ public class JudgmentController {
 
     @PutMapping("/{judgmentId}")
     public ResponseDTO<Response> update(@PathVariable Long judgmentId, @RequestBody Request request) {
-        return null;
+        return ok(judgmentService.update(judgmentId, request));
     }
 
     @DeleteMapping("/{judgmentId}")
