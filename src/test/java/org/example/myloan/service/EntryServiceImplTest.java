@@ -88,4 +88,16 @@ class EntryServiceImplTest {
         assertThat(actual.getBeforeEntryAmount()).isEqualTo(BigDecimal.valueOf(50.00));
         assertThat(actual.getAfterEntryAmount()).isEqualTo(BigDecimal.valueOf(100.00));
     }
+
+    @DisplayName("Delete Entry")
+    @Test
+    void Should_DeleteEntryEntity_When_RequestDeleteExistEntry() {
+        Long entryId = 1L;
+        Entry entry = Entry.builder()
+                .entryId(1L)
+                .build();
+        when(entryRepository.findById(entryId)).thenReturn(Optional.of(entry));
+        entryService.delete(entryId);
+        assertThat(entry.getIsDeleted()).isSameAs(true);
+    }
 }
