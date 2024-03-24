@@ -59,4 +59,15 @@ class EntryServiceImplTest {
         assertThat(actual).isNotNull();
         assertThat(actual.getEntryAmount()).isEqualTo(request.getEntryAmount());
     }
+
+    @DisplayName("Get Entry")
+    @Test
+    void Should_ReturnResponseOfExistEntryEntity_When_RequestExistApplicationId() {
+        Long applicationId = 1L;
+        when(entryRepository.findByApplicationId(applicationId))
+                .thenReturn(Optional.of(Entry.builder().applicationId(applicationId).build()));
+        Response actual = entryService.get(applicationId);
+        assertThat(actual).isNotNull();
+        assertThat(actual.getApplicationId()).isEqualTo(applicationId);
+    }
 }
