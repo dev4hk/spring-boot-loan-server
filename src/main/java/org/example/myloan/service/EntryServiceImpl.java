@@ -13,12 +13,14 @@ import org.example.myloan.repository.ApplicationRepository;
 import org.example.myloan.repository.EntryRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 
-@Service
 @RequiredArgsConstructor
+@Transactional
+@Service
 public class EntryServiceImpl implements EntryService{
 
     private final EntryRepository entryRepository;
@@ -46,6 +48,7 @@ public class EntryServiceImpl implements EntryService{
         return application.get().getContractedAt() != null;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Response get(Long applicationId) {
         Optional<Entry> entry = entryRepository.findByApplicationId(applicationId);
@@ -61,7 +64,6 @@ public class EntryServiceImpl implements EntryService{
                 new BaseException(ResultType.SYSTEM_ERROR));
         BigDecimal beforeEntryAmount = entry.getEntryAmount();
         entry.setEntryAmount(request.getEntryAmount());
-        entryRepository.save(entry);
         Long applicationId = entry.getApplicationId();
         return EntryDto.UpdateResponse.builder()
                 .entryId(entryId)
@@ -73,6 +75,8 @@ public class EntryServiceImpl implements EntryService{
 
     @Override
     public void delete(Long entryId) {
-
+        Entry entry = entryRepository.findById(entryId).orElseThrow(() ->
+                new BaseException(ResultType.SYSTEM_ERROR));
+        entry.setIsDeleted(true);
     }
 }
