@@ -6,6 +6,7 @@ import org.example.myloan.domain.Entry;
 import org.example.myloan.dto.EntryDto;
 import org.example.myloan.dto.EntryDto.Request;
 import org.example.myloan.dto.EntryDto.Response;
+import org.example.myloan.dto.EntryDto.UpdateResponse;
 import org.example.myloan.exception.BaseException;
 import org.example.myloan.exception.ResultType;
 import org.example.myloan.repository.ApplicationRepository;
@@ -13,6 +14,7 @@ import org.example.myloan.repository.EntryRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Service
@@ -54,8 +56,19 @@ public class EntryServiceImpl implements EntryService{
     }
 
     @Override
-    public EntryDto.UpdateResponse update(Long entryId, Request request) {
-        return null;
+    public UpdateResponse update(Long entryId, Request request) {
+        Entry entry = entryRepository.findById(entryId).orElseThrow(() ->
+                new BaseException(ResultType.SYSTEM_ERROR));
+        BigDecimal beforeEntryAmount = entry.getEntryAmount();
+        entry.setEntryAmount(request.getEntryAmount());
+        entryRepository.save(entry);
+        Long applicationId = entry.getApplicationId();
+        return EntryDto.UpdateResponse.builder()
+                .entryId(entryId)
+                .applicationId(applicationId)
+                .beforeEntryAmount(beforeEntryAmount)
+                .afterEntryAmount(request.getEntryAmount())
+                .build();
     }
 
     @Override
