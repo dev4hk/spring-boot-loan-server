@@ -55,7 +55,7 @@ class EntryServiceImplTest {
         Long applicationId = 1L;
         when(applicationRepository.findById(applicationId)).thenReturn(Optional.of(application));
         doReturn(null).when(entryRepository).save(any(Entry.class));
-        Response actual = entryService.create(applicationId, Request.builder().build());
+        Response actual = entryService.create(applicationId, request);
         assertThat(actual).isNotNull();
         assertThat(actual.getEntryAmount()).isEqualTo(request.getEntryAmount());
     }
