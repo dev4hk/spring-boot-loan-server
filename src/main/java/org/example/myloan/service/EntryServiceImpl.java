@@ -46,7 +46,11 @@ public class EntryServiceImpl implements EntryService{
 
     @Override
     public Response get(Long applicationId) {
-        return null;
+        Optional<Entry> entry = entryRepository.findByApplicationId(applicationId);
+        if(entry.isEmpty()) {
+            return null;
+        }
+        return modelMapper.map(entry, Response.class);
     }
 
     @Override
