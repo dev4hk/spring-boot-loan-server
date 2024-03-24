@@ -6,6 +6,7 @@ import org.example.myloan.dto.ApplicationDto;
 import org.example.myloan.dto.EntryDto;
 import org.example.myloan.dto.EntryDto.Request;
 import org.example.myloan.dto.EntryDto.Response;
+import org.example.myloan.dto.EntryDto.UpdateResponse;
 import org.example.myloan.repository.ApplicationRepository;
 import org.example.myloan.repository.EntryRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -69,5 +70,20 @@ class EntryServiceImplTest {
         Response actual = entryService.get(applicationId);
         assertThat(actual).isNotNull();
         assertThat(actual.getApplicationId()).isEqualTo(applicationId);
+    }
+
+    @DisplayName("Update Entry")
+    @Test
+    void Should_ReturnUpdatedResponseOfExistEntryEntity_When_RequestUpdateExistEntry() {
+        Long entryId = 1L;
+        Entry entry = Entry.builder().entryId(entryId).entryAmount(BigDecimal.valueOf(50.00)).build();
+        Request request = Request.builder().entryAmount(BigDecimal.valueOf(100.00)).build();
+        when(entryRepository.findById(entryId))
+                .thenReturn(Optional.of(entry));
+        UpdateResponse actual = entryService.update(entryId, request);
+        assertThat(actual).isNotNull();
+        assertThat(actual.getEntryId()).isEqualTo(entryId);
+        assertThat(actual.getBeforeEntryAmount()).isEqualTo(BigDecimal.valueOf(50.00));
+        assertThat(actual.getAfterEntryAmount()).isEqualTo(BigDecimal.valueOf(100.00));
     }
 }
