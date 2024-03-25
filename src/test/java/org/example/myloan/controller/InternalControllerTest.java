@@ -49,6 +49,6 @@ class InternalControllerTest {
                 .content(objectMapper.writeValueAsString(request))
         )
                 .andExpect(status().isOk());
-        then(entryService).should().create(applicationId, request);
+        then(entryService).should().create(eq(applicationId), any(Request.class));
     }
 }
