@@ -11,9 +11,11 @@ import org.example.myloan.exception.ResultType;
 import org.example.myloan.repository.BalanceRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class BalanceServiceImpl implements BalanceService {
@@ -47,7 +49,16 @@ public class BalanceServiceImpl implements BalanceService {
 
     @Override
     public Response update(Long applicationId, UpdateRequest request) {
-        return null;
+        Balance balance = balanceRepository.findByApplicationId(applicationId).orElseThrow(() ->
+                new BaseException(ResultType.SYSTEM_ERROR));
+        BigDecimal beforeEntryAmount = request.getBeforeEntryAmount();
+        BigDecimal afterEntryAmount = request.getAfterEntryAmount();
+        BigDecimal updatedBalance = balance.getBalance();
+
+        updatedBalance = updatedBalance.subtract(beforeEntryAmount).add(afterEntryAmount);
+        balance.setBalance(updatedBalance);
+
+        return modelMapper.map(balance, Response.class);
     }
 
 }
