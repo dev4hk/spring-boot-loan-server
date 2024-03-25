@@ -6,6 +6,7 @@ import org.example.myloan.dto.ApplicationDto;
 import org.example.myloan.dto.BalanceDto;
 import org.example.myloan.dto.BalanceDto.Request;
 import org.example.myloan.dto.BalanceDto.Response;
+import org.example.myloan.dto.BalanceDto.UpdateRequest;
 import org.example.myloan.repository.BalanceRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -41,12 +42,24 @@ class BalanceServiceTest {
     void Should_ReturnResponseOfNewBalanceEntity_When_RequestCreateBalance() {
         Long applicationId = 1L;
         Request request = Request.builder().entryAmount(BigDecimal.valueOf(100.00)).build();
-        Balance balance = Balance.builder().applicationId(applicationId).build();
         when(balanceRepository.findByApplicationId(applicationId)).thenReturn(Optional.ofNullable(null));
         Response actual = balanceService.create(applicationId, request);
         assertThat(actual).isNotNull();
         assertThat(actual.getApplicationId()).isEqualTo(applicationId);
         assertThat(actual.getBalance()).isEqualTo(BigDecimal.valueOf(100.00));
+    }
+
+    @DisplayName("Update Balance")
+    @Test
+    void Should_ReturnUpdatedResponseOfExistBalanceEntity_When_RequestUpdateExistBalanceInfo() {
+        Long applicationId = 1L;
+        UpdateRequest request = UpdateRequest.builder().beforeEntryAmount(BigDecimal.valueOf(100.00)).afterEntryAmount(BigDecimal.valueOf(200.00)).build();
+        Balance balance = Balance.builder().applicationId(applicationId).balance(BigDecimal.valueOf(500.00)).build();
+        when(balanceRepository.findByApplicationId(applicationId)).thenReturn(Optional.ofNullable(balance));
+        Response actual = balanceService.update(applicationId, request);
+        assertThat(actual).isNotNull();
+        assertThat(actual.getApplicationId()).isEqualTo(applicationId);
+        assertThat(actual.getBalance()).isEqualTo(BigDecimal.valueOf(600.00));
     }
 
 
