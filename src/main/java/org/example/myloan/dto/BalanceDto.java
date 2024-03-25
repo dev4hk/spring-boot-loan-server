@@ -44,4 +44,20 @@ public class BalanceDto implements Serializable {
         private BigDecimal balance;
 
     }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    @Getter
+    @Setter
+    public static class RepaymentRequest {
+        public enum RepaymentType {
+            ADD,
+            REMOVE
+        }
+
+        private RepaymentType type;
+        private BigDecimal repaymentAmount;
+
+    }
 }
