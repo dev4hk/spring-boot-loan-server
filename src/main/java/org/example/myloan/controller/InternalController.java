@@ -19,7 +19,7 @@ public class InternalController extends AbstractController {
 
     @PostMapping("/{applicationId}/entries")
     public ResponseDTO<Response> create(@PathVariable Long applicationId, @RequestBody Request request) {
-        return null;
+        return ok(entryService.create(applicationId, request));
     }
 
     @GetMapping("/{applicationId}/entries")
