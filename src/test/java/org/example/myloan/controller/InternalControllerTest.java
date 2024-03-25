@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.myloan.dto.EntryDto;
 import org.example.myloan.dto.EntryDto.Request;
 import org.example.myloan.dto.EntryDto.Response;
+import org.example.myloan.dto.EntryDto.UpdateResponse;
 import org.example.myloan.service.EntryService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,7 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.BDDMockito.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("Test - Internal Controller")
@@ -50,5 +51,46 @@ class InternalControllerTest {
         )
                 .andExpect(status().isOk());
         then(entryService).should().create(eq(applicationId), any(Request.class));
+    }
+
+    @DisplayName("[API][GET] Get an Entry")
+    @Test
+    public void getEntry() throws Exception {
+        Long applicationId = 1L;
+        Response response = Response.builder().build();
+        given(entryService.get(applicationId)).willReturn(response);
+        mvc.perform(get("/internal/applications/{applicationId}/entries", applicationId)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk());
+        then(entryService).should().get(applicationId);
+    }
+
+    @DisplayName("[API][PUT] Update an Entry")
+    @Test
+    public void updateEntry() throws Exception {
+        Long entryId = 1L;
+        Request request = Request.builder().build();
+        UpdateResponse response = UpdateResponse.builder().build();
+        given(entryService.update(entryId, request)).willReturn(response);
+        mvc.perform(put("/internal/applications/entries/{entryId}", entryId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                )
+                .andExpect(status().isOk());
+        then(entryService).should().update(eq(entryId), any(Request.class));
+    }
+
+    @DisplayName("[API][DELETE] Delete an Entry")
+    @Test
+    public void deleteEntry() throws Exception {
+        Long entryId = 1L;
+        Response response = Response.builder().build();
+        willDoNothing().given(entryService).delete(entryId);
+        mvc.perform(delete("/internal/applications/entries/{entryId}", entryId)
+                        .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk());
+        then(entryService).should().delete(entryId);
     }
 }
