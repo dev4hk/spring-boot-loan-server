@@ -2,8 +2,6 @@ package org.example.myloan.service;
 
 import org.example.myloan.domain.Application;
 import org.example.myloan.domain.Entry;
-import org.example.myloan.dto.ApplicationDto;
-import org.example.myloan.dto.EntryDto;
 import org.example.myloan.dto.EntryDto.Request;
 import org.example.myloan.dto.EntryDto.Response;
 import org.example.myloan.dto.EntryDto.UpdateResponse;
@@ -12,7 +10,6 @@ import org.example.myloan.repository.EntryRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -24,12 +21,11 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class EntryServiceImplTest {
+class EntryServiceTest {
 
 
     @InjectMocks
@@ -40,6 +36,9 @@ class EntryServiceImplTest {
 
     @Mock
     ApplicationRepository applicationRepository;
+
+    @Mock
+    BalanceServiceImpl balanceService;
 
 
     @Spy

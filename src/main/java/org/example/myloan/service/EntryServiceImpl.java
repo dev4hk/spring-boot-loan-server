@@ -3,6 +3,7 @@ package org.example.myloan.service;
 import lombok.RequiredArgsConstructor;
 import org.example.myloan.domain.Application;
 import org.example.myloan.domain.Entry;
+import org.example.myloan.dto.BalanceDto;
 import org.example.myloan.dto.EntryDto;
 import org.example.myloan.dto.EntryDto.Request;
 import org.example.myloan.dto.EntryDto.Response;
@@ -27,6 +28,8 @@ public class EntryServiceImpl implements EntryService{
 
     private final ApplicationRepository applicationRepository;
 
+    private final BalanceServiceImpl balanceService;
+
     private final ModelMapper modelMapper;
 
     @Override
@@ -37,6 +40,10 @@ public class EntryServiceImpl implements EntryService{
         Entry entry = modelMapper.map(request, Entry.class);
         entry.setApplicationId(applicationId);
         entryRepository.save(entry);
+        balanceService.create(applicationId,
+                BalanceDto.Request.builder()
+                        .entryAmount(request.getEntryAmount())
+                        .build());
         return modelMapper.map(entry, Response.class);
     }
 
@@ -65,6 +72,11 @@ public class EntryServiceImpl implements EntryService{
         BigDecimal beforeEntryAmount = entry.getEntryAmount();
         entry.setEntryAmount(request.getEntryAmount());
         Long applicationId = entry.getApplicationId();
+        balanceService.update(applicationId,
+                BalanceDto.UpdateRequest.builder()
+                        .beforeEntryAmount(beforeEntryAmount)
+                        .afterEntryAmount(request.getEntryAmount())
+                        .build());
         return EntryDto.UpdateResponse.builder()
                 .entryId(entryId)
                 .applicationId(applicationId)
@@ -78,5 +90,13 @@ public class EntryServiceImpl implements EntryService{
         Entry entry = entryRepository.findById(entryId).orElseThrow(() ->
                 new BaseException(ResultType.SYSTEM_ERROR));
         entry.setIsDeleted(true);
+        BigDecimal beforeEntryAmount = entry.getEntryAmount();
+        Long applicationId = entry.getApplicationId();
+        balanceService.update(applicationId,
+                BalanceDto.UpdateRequest.builder()
+                        .beforeEntryAmount(beforeEntryAmount)
+                        .afterEntryAmount(BigDecimal.ZERO)
+                        .build()
+        );
     }
 }
