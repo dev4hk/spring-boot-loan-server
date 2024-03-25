@@ -42,7 +42,7 @@ class BalanceServiceTest {
         Long applicationId = 1L;
         Request request = Request.builder().entryAmount(BigDecimal.valueOf(100.00)).build();
         Balance balance = Balance.builder().applicationId(applicationId).build();
-        when(balanceRepository.findByApplicationId(applicationId)).thenReturn(Optional.of(balance));
+        when(balanceRepository.findByApplicationId(applicationId)).thenReturn(Optional.ofNullable(null));
         Response actual = balanceService.create(applicationId, request);
         assertThat(actual).isNotNull();
         assertThat(actual.getApplicationId()).isEqualTo(applicationId);
