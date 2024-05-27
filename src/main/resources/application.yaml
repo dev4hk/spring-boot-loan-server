@@ -1,11 +1,16 @@
 server:
   port: 8080
 spring:
+#  datasource:
+#    driverClassName: org.h2.Driver
+#    url: jdbc:h2:mem:testdb
+#    username: sa
+#    password:
   datasource:
-    driverClassName: org.h2.Driver
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password:
+    url: ${TEST_DB_URL}
+    username: ${TEST_DB_USERNAME}
+    password: ${TEST_DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: create
@@ -14,11 +19,11 @@ spring:
         format_sql: true
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
-    database-platform: org.hibernate.dialect.H2Dialect
-  h2:
-    console:
-      path: /h2-console
-      enabled: true
+#    database-platform: org.hibernate.dialect.H2Dialect
+#  h2:
+#    console:
+#      path: /h2-console
+#      enabled: true
   servlet:
     multipart:
       location: ${FILE_STORAGE_PATH}
